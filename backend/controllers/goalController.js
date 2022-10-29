@@ -1,11 +1,12 @@
 const asyncHandler = require("express-async-handler");
 const Goal = require("../models/goalModel");
+const User = require("../models/userModel");
 
 // @desc    Get goals
 // @route   GET /api/goals
 // @access  Private
 const getGoals = asyncHandler(async (req, res) => {
-  const goals = await Goal.find();
+  const goals = await Goal.find({ user: req.user._id });
   res.json(goals);
 });
 
@@ -29,7 +30,7 @@ const setGoal = asyncHandler(async (req, res) => {
     res.status(400);
     throw new Error("Please add a text field");
   }
-  const goal = await Goal.create({ text: req.body.text });
+  const goal = await Goal.create({ user: req.user._id, text: req.body.text });
   res.status(201).json(goal);
 });
 
@@ -42,7 +43,10 @@ const updateGoal = asyncHandler(async (req, res) => {
     res.status(400);
     throw new Error("Goal not found");
   }
-  await Goal.updateOne({ _id: req.params.id }, { ...req.body });
+  await Goal.updateOne(
+    { _id: req.params.id, user: req.user._id },
+    { ...req.body }
+  );
   res.json({ message: `Updated Goal ${req.params.id}` });
 });
 
@@ -50,7 +54,10 @@ const updateGoal = asyncHandler(async (req, res) => {
 // @route   DEL /api/goals/:id
 // @access  Private
 const deleteGoal = asyncHandler(async (req, res) => {
-  const result = await Goal.deleteOne({ _id: req.params.id });
+  const result = await Goal.deleteOne({
+    _id: req.params.id,
+    user: req.user._id,
+  });
   res.json(result);
 });
 

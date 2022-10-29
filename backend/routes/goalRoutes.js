@@ -10,11 +10,11 @@ const {
   deleteGoal,
 } = require("../controllers/goalController");
 
-router.route("/", authenticate).get(getGoals).post(setGoal);
+router.route("/").get(authenticate, getGoals).post(authenticate, setGoal);
 router
-  .route("/:id", authenticate)
-  .get(getGoal)
-  .put(updateGoal)
-  .delete(deleteGoal);
+  .route("/:id")
+  .get(authenticate, getGoal)
+  .put(authenticate, updateGoal)
+  .delete(authenticate, deleteGoal);
 
 module.exports = router;

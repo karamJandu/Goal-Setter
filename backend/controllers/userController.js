@@ -53,8 +53,7 @@ const loginUser = asyncHandler(async (req, res) => {
 // @route   GET /api/users/me
 // @access Public
 const getMe = asyncHandler(async (req, res) => {
-  const me = await User.findOne({ email: req.userEmail });
-  res.json(me);
+  res.json(req.user);
 });
 
 module.exports = { registerUser, loginUser, getMe };
