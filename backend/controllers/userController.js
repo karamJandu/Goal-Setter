@@ -20,7 +20,8 @@ const registerUser = asyncHandler(async (req, res) => {
   const hashedPassword = bcrypt.hashSync(password, salt);
 
   const user = await User.create({ name, email, password: hashedPassword });
-  res.json(user);
+  const token = jwt.sign({ email: user.email }, process.env.JWT_SECRET);
+  res.status(201).json({ email: user.email, token });
 });
 
 // @desc    Authenticate user
