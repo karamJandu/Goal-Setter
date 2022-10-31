@@ -2,6 +2,11 @@ const jwt = require("jsonwebtoken");
 const User = require("../models/userModel");
 
 const authenticate = async (req, res, next) => {
+  if (!req.headers || !req.headers.authorization) {
+    res.status(400);
+    throw new Error("Could not authenticate");
+  }
+
   const token = req.headers.authorization.split(" ")[1];
 
   if (!jwt.verify(token, process.env.JWT_SECRET)) {
