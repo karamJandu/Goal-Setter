@@ -4,6 +4,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { addGoals, getGoals, updateGoals } from "../features/goals/goalSlice";
 import { useState } from "react";
 import Goal from "./Goal";
+import { getMe } from "../features/auth/authSlice";
 
 const Dashboard = () => {
   const navigate = useNavigate();
@@ -19,6 +20,7 @@ const Dashboard = () => {
     if (!user) {
       navigate("/login");
     } else {
+      dispatch(getMe());
       dispatch(getGoals());
     }
   }, [user, navigate, dispatch]);
@@ -40,6 +42,7 @@ const Dashboard = () => {
 
   return (
     <>
+      <h2>Welcome {user && user.name}</h2>
       <form onSubmit={(e) => onSubmit(e, goalInput)}>
         <div className="form-group">
           <input
@@ -51,6 +54,7 @@ const Dashboard = () => {
             }}
             value={goalInput.text}
             type="text"
+            placeholder="Enter a goal"
           />
           {error && (
             <p>
