@@ -18,7 +18,7 @@ const addGoals = async (goalData) => {
     headers: { authorization: `Bearer ${token}` },
   });
   if (response.data) {
-    return response.data;
+    return getGoals();
   }
 };
 
@@ -28,7 +28,7 @@ const updateGoals = async (goalData) => {
     headers: { authorization: `Bearer ${token}` },
   });
   if (response.data) {
-    return response.data;
+    return getGoals();
   }
 };
 
@@ -38,7 +38,7 @@ const deleteGoals = async (goalData) => {
     headers: { authorization: `Bearer ${token}` },
   });
   if (response.data) {
-    return response.data;
+    return getGoals();
   }
 };
 

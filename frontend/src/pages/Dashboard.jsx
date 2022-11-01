@@ -7,8 +7,9 @@ import Goal from "./Goal";
 
 const Dashboard = () => {
   const navigate = useNavigate();
-  const [goal, setGoal] = useState({ text: "" });
+  const [goalInput, setGoalInput] = useState({ text: "" });
   const [buttonText, setButtonText] = useState("Add Goal");
+  const [error, setError] = useState(null);
   const { goals } = useSelector((state) => state.goals);
   const { user } = useSelector((state) => state.auth);
 
@@ -24,24 +25,38 @@ const Dashboard = () => {
 
   const onSubmit = (e, goalData) => {
     e.preventDefault();
+    if (!goalData.text || goalData.text.trim() === "") {
+      setError("Please enter a goal!!!");
+      return;
+    }
     if (buttonText === "Add Goal") {
       dispatch(addGoals(goalData));
     } else if (buttonText === "Update Goal") {
-      console.log(goalData);
+      dispatch(updateGoals(goalData));
     }
+    setGoalInput({ text: "" });
+    setButtonText("Add Goal");
   };
 
   return (
     <>
-      <form onSubmit={(e) => onSubmit(e, { text: goal })}>
+      <form onSubmit={(e) => onSubmit(e, goalInput)}>
         <div className="form-group">
           <input
             className="form-control"
             name="goal"
-            onChange={(e) => setGoal({ ...goal, text: e.target.value })}
-            value={goal.text}
+            onChange={(e) => {
+              setGoalInput({ ...goalInput, text: e.target.value });
+              setError(null);
+            }}
+            value={goalInput.text}
             type="text"
           />
+          {error && (
+            <p>
+              <i>{error}</i>
+            </p>
+          )}
         </div>
         <div className="form-group">
           <button
@@ -59,7 +74,8 @@ const Dashboard = () => {
             <Goal
               key={goal._id}
               goal={goal}
-              setGoal={setGoal}
+              setGoalInput={setGoalInput}
+              goalInput={goalInput}
               setButtonText={setButtonText}
               onSubmit={onSubmit}
             />

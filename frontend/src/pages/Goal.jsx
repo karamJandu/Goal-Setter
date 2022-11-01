@@ -6,7 +6,7 @@ const Goal = (props) => {
   const dispatch = useDispatch();
 
   const onEdit = () => {
-    props.setGoal({ text: props.goal.text, _id: props.goal._id });
+    props.setGoalInput({ text: props.goal.text, _id: props.goal._id });
     props.setButtonText("Update Goal");
   };
 
